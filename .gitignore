@@ -1,0 +1,118 @@
+############################################
+# GENERAL
+############################################
+
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+.DS_Store
+Thumbs.db
+
+############################################
+# PYTHON / DJANGO
+############################################
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.env.*
+.venv/
+
+# Django stuff
+*.sqlite3
+db.sqlite3
+local_settings.py
+
+# Django media & static (generated)
+media/
+staticfiles/
+
+# Migrations cache
+**/migrations/__pycache__/
+
+############################################
+# DJANGO SECRET FILES
+############################################
+
+# Environment variables
+.env
+.env.local
+.env.dev
+.env.prod
+
+# Secrets
+secrets.json
+*.key
+
+############################################
+# POSTGRESQL
+############################################
+
+# Local postgres data
+pgdata/
+*.pid
+
+############################################
+# NODE / VUE
+############################################
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################################
+# VITE / VUE CACHE
+############################################
+
+.vite/
+.cache/
+
+############################################
+# VS CODE
+############################################
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+############################################
+# TESTING / COVERAGE
+############################################
+
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+
+############################################
+# DOCKER (si lo usas después)
+############################################
+
+docker-compose.override.yml
+.env.docker
+
+############################################
+# DOCUMENTATION BUILDS
+############################################
+
+docs/_build/
