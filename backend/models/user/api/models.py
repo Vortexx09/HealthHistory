@@ -15,13 +15,14 @@ class UserType(models.Model):
 class User(models.Model):
     user_id = models.BigAutoField(primary_key=True)
     user_type = models.ForeignKey(UserType, on_delete=models.SET_NULL, null=True, blank=True)
-    name = models.CharField(max_length=100, null=True)
-    surname = models.CharField(max_length=100, null=True)
-    dni = models.CharField(max_length=20, null=True)
-    dni_type = models.CharField(max_length=100, null=True)
+    names = models.CharField(max_length=100, null=True)
+    surnames = models.CharField(max_length=100, null=True)
+    id_number = models.CharField(max_length=20, null=True)
+    id_type = models.CharField(max_length=100, null=True)
     email = models.CharField(max_length=100, null=True)
     password = models.CharField(max_length=100, null=True)
     phone = models.CharField(max_length=20, null=True)
+    dob = models.DateField()
 
     class Meta:
         db_table = 'user'
