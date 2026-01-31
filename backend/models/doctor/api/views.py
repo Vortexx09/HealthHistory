@@ -8,4 +8,4 @@ class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
     permission_classes = [permissions.AllowAny]
-    lookup_field = 'id_doctor'
+    lookup_field = 'doctor_id'

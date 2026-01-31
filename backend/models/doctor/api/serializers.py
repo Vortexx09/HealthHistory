@@ -4,4 +4,4 @@ from models.doctor.api.models import Doctor
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = ['tarjeta_profesional','especializacion']
+        fields = ['user', 'professional_card', 'specialization']
