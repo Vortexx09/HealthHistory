@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('models.user.api.urls')),
     path('doctors/', include('models.doctor.api.urls')),
-    path('exams/', include('models.exam.api.urls'))
+    path('exams/', include('models.exam.api.urls')),
+    path('registers/', include('models.register.api.urls')),
 ]
