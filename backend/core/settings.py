@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'models.patient',
     'models.doctor',
     'models.exam',
-    'models.register'
+    'models.register',
+    'models.history',
 ]
 
 MIDDLEWARE = [
