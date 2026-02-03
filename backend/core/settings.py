@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'models.user',
-    'models.patient',
-    'models.doctor',
-    'models.exam',
-    'models.register',
-    'models.history',
+    'apps.user',
+    'apps.patient',
+    'apps.doctor',
+    'apps.exam',
+    'apps.register',
+    'apps.history',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
