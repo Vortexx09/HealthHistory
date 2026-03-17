@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.register.api.models import Register
+from apps.register.models import Register
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

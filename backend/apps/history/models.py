@@ -1,6 +1,6 @@
 from django.db import models
-from apps.doctor.api.models import Doctor
-from apps.register.api.models import Register
+from apps.doctor.models import Doctor
+from apps.register.models import Register
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.

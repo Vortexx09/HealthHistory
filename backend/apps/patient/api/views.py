@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
-from apps.patient.api.models import Patient
+from apps.patient.models import Patient
 from apps.patient.api.serializers import PatientSerializer
 
 # Create your views here.

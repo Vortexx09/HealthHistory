@@ -1,6 +1,6 @@
 import os
 from django.db import models
-from apps.history.api.models import History
+from apps.history.models import History
 
 def exam_file_path(instance, filename):
     ext = filename.split('.')[-1]

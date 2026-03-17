@@ -1,6 +1,6 @@
 from django.db import models
-from apps.patient.api.models import Patient
-from apps.doctor.api.models import Doctor
+from apps.patient.models import Patient
+from apps.doctor.models import Doctor
 
 # Create your models here.
 class Register(models.Model):

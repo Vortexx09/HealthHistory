@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions
-from apps.history.api.models import History
+from apps.history.models import History
 from apps.history.api.serializers import HistorySerializer
 
 # Create your views here.

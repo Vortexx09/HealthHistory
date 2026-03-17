@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions
-from apps.exam.api.models import Exam
+from apps.exam.models import Exam
 from apps.exam.api.serializers import ExamSerializer
 
 class ExamViewSet(viewsets.ModelViewSet):
