@@ -118,9 +118,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { user, isAuthenticated } from '../store/auth'
 import axios from 'axios'
 
 const router = useRouter()
+
 const form = ref({
   email: '',
   password: '',
@@ -137,28 +139,32 @@ const handleLogin = async () => {
     errorMessage.value = ''
     successMessage.value = ''
 
-    // Example API call - replace with your actual backend endpoint
-    // const response = await axios.post('/api/auth/login/', {
-    //  email: form.value.email,
-    //  password: form.value.password,
-    //})
+    // API call
+    const response = await axios.post('http://127.0.0.1:8000//auth/login/', {
+      username: form.value.email,
+      password: form.value.password,
+    })
 
-    // For demo purposes, simulate a successful login
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    // Store token
+    localStorage.setItem("access", response.data.access)
+    localStorage.setItem("refresh", response.data.refresh)
 
-    // Store token if your API returns one
-    // localStorage.setItem('token', response.data.token)
+    // Update state
+    isAuthenticated.value = true
+    user.value = response.data.user
 
     successMessage.value = 'Login successful!'
     
     // Redirect after a short delay
     setTimeout(() => {
       router.push('/')
-    }, 1000)
+    }, 500)
   } catch (error: any) {
     errorMessage.value = error.response?.data?.message || 'Login failed. Please try again.'
   } finally {
     isLoading.value = false
   }
 }
+
+
 </script>

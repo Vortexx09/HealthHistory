@@ -15,11 +15,13 @@
             </p>
             <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:gap-4">
               <router-link
+                v-if="!isAuthenticated"
                 to="/register"
                 class="inline-flex items-center justify-center rounded-lg bg-primary-600 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               >
                 Start Free
               </router-link>
+              
               <button
                 @click="scrollToFeatures"
                 class="inline-flex items-center justify-center rounded-lg border border-secondary-300 px-6 py-3 text-base font-semibold text-secondary-700 transition-colors hover:border-secondary-400 hover:bg-secondary-50"
@@ -180,7 +182,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { isAuthenticated, user } from '../store/auth.ts'
+
 
 const featuresRef = ref<HTMLElement | null>(null)
 
@@ -189,4 +193,5 @@ const scrollToFeatures = () => {
     featuresRef.value.scrollIntoView({ behavior: 'smooth' })
   }
 }
+
 </script>

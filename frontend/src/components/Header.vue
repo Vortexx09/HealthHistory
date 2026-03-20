@@ -27,6 +27,7 @@
 
         <div class="flex items-center gap-2 sm:gap-3">
           <router-link
+            v-if="!isAuthenticated"
             to="/login"
             :class="[
               'px-3 py-2 text-sm font-medium rounded-md transition-colors',
@@ -37,6 +38,19 @@
           >
             Sign In
           </router-link>
+          <button
+            v-else
+            v-on:click="logout"
+            :class="[
+              'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+              $route.path === '/login'
+                ? 'bg-primary-50 text-primary-700'
+                : 'text-secondary-700 hover:text-primary-600',
+            ]"
+          >
+            Log Out
+          </button>
+
           <router-link
             to="/register"
             class="rounded-md bg-primary-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
@@ -50,6 +64,8 @@
 </template>
 
 <script setup lang="ts">
+import { logout } from '../services/authService'
+import { isAuthenticated } from '../store/auth';
 import { useRoute } from 'vue-router'
 
 const route = useRoute()

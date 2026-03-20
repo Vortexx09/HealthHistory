@@ -4,6 +4,9 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import PlaceholderView from '../views/PlaceholderView.vue'
 
+import { useAuth } from '../services/authService'
+
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -28,6 +31,24 @@ const router = createRouter({
       component: PlaceholderView,
     },
   ],
+})
+
+// Router Guard
+router.beforeEach(async (to, from) => {
+  const { initAuth, isAuthenticated, authInitialized } = useAuth()
+
+  if (!authInitialized.value) {
+    await initAuth()
+  }
+
+  if (to.meta.requiresAuth && !isAuthenticated.value) {
+    return { 
+      name: 'login',
+    }
+    
+  }
+
+  return true
 })
 
 export default router
