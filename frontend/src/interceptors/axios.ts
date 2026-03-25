@@ -1,5 +1,6 @@
 import axios from "axios"
 import { logout } from "../services/authService"
+import { isAuthenticated, user } from "../store/auth"
 
 // Refresh Token
 axios.interceptors.response.use(
@@ -8,15 +9,19 @@ axios.interceptors.response.use(
 
     if (error.response?.status === 401) {
 
-      const refresh = localStorage.getItem("refresh")
+      const refresh = localStorage.getItem("refresh")      
 
       if (!refresh) {
+        window.location.href = "/login"          
+        isAuthenticated.value = false
+        user.value = null
         logout()
-        return Promise.reject(error)
-      }
 
+        return Promise.reject(error)
+
+      }
       try {
-        const res = await axios.post("/auth/refresh/", {
+        const res = await axios.post("http://127.0.0.1:8000/auth/refresh/", {
           refresh
         })
 
@@ -27,7 +32,8 @@ axios.interceptors.response.use(
 
         return axios(error.config)
 
-      } catch {
+      } 
+      catch {
         logout()
       }
     }

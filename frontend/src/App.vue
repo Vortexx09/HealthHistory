@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { user } from './store/auth'
 import Header from './components/Header.vue'
+
+onMounted(async () => {
+})
+
 </script>
 
 <template>

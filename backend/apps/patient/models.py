@@ -5,7 +5,10 @@ from apps.user.models import User
 class Patient(models.Model):
     patient_id = models.BigAutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    affiliation_type = models.CharField(max_length=2, null=True)
+    
+    address = models.CharField(max_length=100, null=True)
+    sex_code = models.CharField(max_length=1, null=False)
+
     
     class Meta:
         db_table = 'patient'

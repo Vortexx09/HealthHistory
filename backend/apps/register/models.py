@@ -7,6 +7,7 @@ class Register(models.Model):
     register_id = models.BigAutoField(primary_key=True)
     patient = models.OneToOneField(Patient, on_delete=models.SET_NULL, null=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
+    
     country_code = models.CharField(max_length=3, null=True)
     municipality_code = models.CharField(max_length=5, null=True)
     territory_zone_code = models.CharField(max_length=2, null=True)

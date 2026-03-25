@@ -15,18 +15,18 @@
       <!-- Form Card -->
       <div class="rounded-lg bg-white p-8 shadow-sm border border-secondary-200">
         <form @submit.prevent="handleLogin" class="space-y-6">
-          <!-- Email Input -->
+          <!-- ID Input -->
           <div>
-            <label for="email" class="block text-sm font-medium text-secondary-900">
-              Email Address
+            <label for="id_number" class="block text-sm font-medium text-secondary-900">
+              Identification Number
             </label>
             <input
-              id="email"
-              v-model="form.email"
-              type="email"
+              id="id_number"
+              v-model="form.id_number"
+              type="id_number"
               required
               class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
-              placeholder="you@example.com"
+              placeholder="123456789"
             />
           </div>
 
@@ -108,7 +108,7 @@
       <!-- Info Box -->
       <div class="mt-6 rounded-lg bg-blue-50 p-4 border border-blue-200">
         <p class="text-sm text-blue-900">
-          <strong>Demo credentials:</strong> Use any email and password to test the form (backend integration required)
+          <strong>Demo credentials:</strong> Use any id number and password to test the form (backend integration required)
         </p>
       </div>
     </div>
@@ -118,13 +118,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { user, isAuthenticated } from '../store/auth'
-import axios from 'axios'
+import { user } from '../store/auth'
+import { fetchUser, login } from '../services/authService'
 
 const router = useRouter()
 
 const form = ref({
-  email: '',
+  id_number: '',
   password: '',
   rememberMe: false,
 })
@@ -132,6 +132,7 @@ const form = ref({
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
+const role = user.value?.user_type
 
 const handleLogin = async () => {
   try {
@@ -139,30 +140,27 @@ const handleLogin = async () => {
     errorMessage.value = ''
     successMessage.value = ''
 
-    // API call
-    const response = await axios.post('http://127.0.0.1:8000//auth/login/', {
-      username: form.value.email,
-      password: form.value.password,
-    })
+    // Login and authentication
+    await login(form.value.id_number, form.value.password)
 
-    // Store token
-    localStorage.setItem("access", response.data.access)
-    localStorage.setItem("refresh", response.data.refresh)
-
-    // Update state
-    isAuthenticated.value = true
-    user.value = response.data.user
-
+    // Sucess message
     successMessage.value = 'Login successful!'
     
     // Redirect after a short delay
     setTimeout(() => {
-      router.push('/')
+      if (role === 'doctor') {
+        router.push('/dashboard')
+      } else {
+        router.push('/')
+      }
     }, 500)
+
   } catch (error: any) {
     errorMessage.value = error.response?.data?.message || 'Login failed. Please try again.'
+
   } finally {
     isLoading.value = false
+
   }
 }
 

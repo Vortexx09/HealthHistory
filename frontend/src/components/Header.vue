@@ -52,10 +52,18 @@
           </button>
 
           <router-link
+            v-if="!isAuthenticated"
             to="/register"
             class="rounded-md bg-primary-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
           >
             Get Started
+          </router-link>
+          <router-link
+            v-else
+            to="dashboard"
+            class="rounded-md bg-primary-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
+          >
+            To Dashboard
           </router-link>
         </div>
       </div>
@@ -65,7 +73,7 @@
 
 <script setup lang="ts">
 import { logout } from '../services/authService'
-import { isAuthenticated } from '../store/auth';
+import { isAuthenticated, user } from '../store/auth';
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
