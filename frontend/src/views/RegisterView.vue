@@ -247,7 +247,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '../api'
 
 const router = useRouter()
 
@@ -297,8 +297,7 @@ const handleRegister = async () => {
     successMessage.value = ''
 
     // API call
-    const response = await axios.post('http://127.0.0.1:8000/users/', {
-      username: form.value.email,
+    const response = await api.post('/users/', {
       first_name: form.value.firstName,
       last_name: form.value.lastName,
       email: form.value.email,
@@ -315,7 +314,7 @@ const handleRegister = async () => {
       router.push('/login')
     }, 2000)
   } catch (error: any) {
-    errorMessage.value = error.response?.data?.message || 'Registration failed. Please try again.'
+    errorMessage.value = error.response?.data?.detail || 'Registration failed. Please try again.'
   } finally {
     isLoading.value = false
   }

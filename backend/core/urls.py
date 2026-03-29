@@ -18,13 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
+from apps.user.api.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path("auth/login/", TokenObtainPairView.as_view()),
     path("auth/refresh/", TokenRefreshView.as_view()),
-
+    path("auth/login/", LoginView.as_view()),
+    path('patients/', include('apps.patient.api.urls')),
     path('users/', include('apps.user.api.urls')),
     path('user_types/', include('apps.user_type.api.urls')),
     path('doctors/', include('apps.doctor.api.urls')),

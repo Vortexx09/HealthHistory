@@ -39,4 +39,4 @@ class Register(models.Model):
         db_table = 'register'
 
     def __str__(self):
-        return self.patient
+        return str(self.patient)

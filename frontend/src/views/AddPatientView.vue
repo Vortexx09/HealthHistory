@@ -356,7 +356,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '../api'
 
 const router = useRouter()
 
@@ -395,23 +395,47 @@ const handleSubmit = async () => {
     errorMessage.value = ''
     successMessage.value = ''
 
-    // Example API call - replace with your actual backend endpoint
-    // const response = await axios.post('/api/patients/', {
-    //   ...form.value.personal,
-    //   ...form.value.medical,
-    // })
+    // Step 1: Create User
+    const userResponse = await api.post('/users/', {
+      first_name: form.value.personal.first_name,
+      last_name: form.value.personal.last_name,
+      id_number: form.value.personal.id_number,
+      id_type: form.value.personal.id_type,
+      phone: form.value.personal.phone,
+      dob: form.value.personal.dob || null,
+      email: form.value.personal.email,
+      password: form.value.personal.id_number, // default password is their id_number
+    })
 
-    // For demo purposes, simulate a successful submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    const userId = userResponse.data.id  
+
+    // Step 2: Create Patient
+    const patientResponse = await api.post('/patients/', {
+      user: userId,
+      address: form.value.personal.address,
+      sex_code: form.value.personal.sex_code,
+    })
+
+    const patientId = patientResponse.data.patient_id
+
+    // Step 3: Create Register
+    await api.post('/registers/', {
+      patient: patientId,
+      occupation: form.value.personal.occupation,
+      disability: form.value.medical.disability ? '01' : '00',
+      diabetes: form.value.medical.diabetes,
+      cancer: form.value.medical.cancer,
+      alcohol_consumption: form.value.medical.alcohol_consumption,
+      smoker: form.value.medical.smoker,
+      drug_use: form.value.medical.drug_use,
+      occupational_risk: form.value.medical.occupational_risk || null,
+    })
 
     successMessage.value = '¡Paciente agregado exitosamente!'
+    setTimeout(() => router.push('/history'), 1500)
 
-    // Redirect to history after a short delay
-    setTimeout(() => {
-      router.push('/history')
-    }, 1500)
   } catch (error: any) {
-    errorMessage.value = error.response?.data?.message || 'Error al guardar el paciente. Por favor intenta de nuevo.'
+    errorMessage.value = error.response?.data?.detail || 'Error al guardar el paciente.'
   } finally {
     isLoading.value = false
   }

@@ -5,7 +5,13 @@ from apps.history.api.serializers import HistorySerializer
 
 # Create your views here.
 class HistoryViewSet(viewsets.ModelViewSet):
-    queryset = History.objects.all()
     serializer_class = HistorySerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'history_id'
+
+    def get_queryset(self):
+        queryset = History.objects.all()
+        register_id = self.request.query_params.get('register')
+        if register_id:
+            queryset = queryset.filter(register__register_id=register_id)
+        return queryset

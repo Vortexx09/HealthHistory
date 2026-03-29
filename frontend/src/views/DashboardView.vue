@@ -118,7 +118,7 @@
 
           <!-- Manage Patient Feature -->
           <router-link
-            to="/"
+            to="/history"
             class="group rounded-lg bg-white p-8 shadow-sm border-2 border-secondary-200 transition-all hover:border-blue-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             <div class="flex flex-col items-center text-center">
@@ -140,7 +140,7 @@
 
           <!-- Add History Feature -->
           <router-link
-            to="/"
+            to="/history"
             class="group rounded-lg bg-white p-8 shadow-sm border-2 border-secondary-200 transition-all hover:border-accent-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-2"
           >
             <div class="flex flex-col items-center text-center">
@@ -237,27 +237,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { isAuthenticated, user, authInitialized }  from "../store/auth.ts"
-import axios from 'axios'
+import { ref, computed, onMounted } from 'vue'
+import { user } from '../store/auth'
+import api from '../api'
 
-// Dashboard Data
-const totalPatients = ref(48)
-const appointmentsThisMonth = ref(15)
-const urgentCases = ref(3)
-const pendingRecords = ref(7)
+// Real data
+const totalPatients = ref(0)
 
-console.log(isAuthenticated.value)
+// Placeholder data (no backend support yet)
+const appointmentsThisMonth = ref(0)
+const urgentCases = ref(0)
+const pendingRecords = ref(0)
 
-const upcomingAppointments = ref([
-  { id: 1, name: 'John Anderson', initials: 'JA', time: 'Today at 2:00 PM', type: 'Follow-up' },
-  { id: 2, name: 'Maria Garcia', initials: 'MG', time: 'Tomorrow at 10:30 AM', type: 'Consultation' },
-  { id: 3, name: 'Robert Wilson', initials: 'RW', time: 'Dec 15 at 3:00 PM', type: 'Check-up' },
-])
+const upcomingAppointments = ref<any[]>([])
 
 const currentDate = computed(() => {
   const today = new Date()
-  return today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  return today.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 })
 
 const getGreeting = () => {
@@ -267,4 +268,12 @@ const getGreeting = () => {
   return 'Good evening'
 }
 
+onMounted(async () => {
+  try {
+    const patientsRes = await api.get('/patients/')
+    totalPatients.value = patientsRes.data.length
+  } catch {
+    totalPatients.value = 0
+  }
+})
 </script>

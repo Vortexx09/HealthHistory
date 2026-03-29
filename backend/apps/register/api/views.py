@@ -7,5 +7,5 @@ from apps.register.api.serializers import RegisterSerializer
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = Register.objects.all()
     serializer_class = RegisterSerializer
-    permissions_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
     lookup_field = 'patient'

@@ -1,11 +1,11 @@
 import { ref } from "vue"
-import axios from "axios"
+import api from '../api'
 import { isAuthenticated, user, authInitialized }  from "../store/auth.ts"
 
 export const login = async (username:string,password:string) => {
   // API call
-  const response = await axios.post('http://127.0.0.1:8000/auth/login/', {
-    username,
+  const response = await api.post('/auth/login/', {
+    id_number: username,
     password,
   }) 
 
@@ -17,7 +17,7 @@ export const login = async (username:string,password:string) => {
   isAuthenticated.value = true
 
   // Pass access token
-  axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access")
+  api.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("access")
   
   return response.data
 }
@@ -34,7 +34,7 @@ export const logout = () => {
 // Fetch the user data
 export const fetchUser = async () => {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/users/me/")
+    const response = await api.get('/users/me/')
     user.value = response.data
   } catch {
     user.value = null
@@ -46,7 +46,7 @@ export const initAuth = async () => {
   const token = localStorage.getItem("access")
 
   if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`
     isAuthenticated.value = true
 
     try {
@@ -85,13 +85,13 @@ export const removeToken = async () => {
 export const refreshToken = async () => {
   const refresh = localStorage.getItem("refresh")
 
-  const response = await axios.post("http://127.0.0.1:8000/auth/refresh/", {
+  const response = await api.post('/auth/refresh/', {
     refresh
   })
 
   localStorage.setItem("access", response.data.access)
 
-  axios.defaults.headers.common["Authorization"] =
+  api.defaults.headers.common["Authorization"] =
     "Bearer " + response.data.access
 }
 

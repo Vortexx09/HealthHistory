@@ -1,9 +1,9 @@
-import axios from "axios"
+import api from '../api'
 import { logout } from "../services/authService"
 import { isAuthenticated, user } from "../store/auth"
 
 // Refresh Token
-axios.interceptors.response.use(
+api.interceptors.response.use(
   response => response,
   async error => {
 
@@ -21,7 +21,7 @@ axios.interceptors.response.use(
 
       }
       try {
-        const res = await axios.post("http://127.0.0.1:8000/auth/refresh/", {
+        const res = await api.post('/auth/refresh/', {
           refresh
         })
 
@@ -30,7 +30,7 @@ axios.interceptors.response.use(
         error.config.headers["Authorization"] =
           "Bearer " + res.data.access
 
-        return axios(error.config)
+        return api(error.config)
 
       } 
       catch {

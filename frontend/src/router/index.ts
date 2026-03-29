@@ -33,16 +33,19 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/add-patient',
       name: 'add-patient',
       component: AddPatientView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/history',
       name: 'history',
       component: PatientHistoryView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/:pathMatch(.*)*',
@@ -55,20 +58,13 @@ const router = createRouter({
 // Router Guard
 router.beforeEach(async (to, from) => {
   const { initAuth, isAuthenticated, authInitialized } = useAuth()
-  const token = localStorage.getItem("access")
 
-  if (expiredToken(token)){
-    await refreshToken()
-  }
-  
   if (!authInitialized.value) {
     await initAuth()
   }
 
-  if (to.meta.requiresAuth && !token) {
-    return { 
-      name: 'login',
-    }
+  if (to.meta.requiresAuth && !isAuthenticated.value) {
+    return { name: 'login' }
   }
 
   return true

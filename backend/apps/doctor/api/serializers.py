@@ -4,4 +4,4 @@ from apps.doctor.models import Doctor
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = ['user', 'professional_card', 'specialization']
+        fields = ['doctor_id', 'user', 'professional_card', 'specialization']

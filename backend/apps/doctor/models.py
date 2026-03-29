@@ -13,4 +13,4 @@ class Doctor(models.Model):
         db_table = 'Doctor'
 
     def __str__(self):
-        return self.doctor_id
+        return str(self.doctor_id)

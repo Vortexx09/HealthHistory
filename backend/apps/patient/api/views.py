@@ -3,9 +3,14 @@ from rest_framework import viewsets, permissions
 from apps.patient.models import Patient
 from apps.patient.api.serializers import PatientSerializer
 
-# Create your views here.
 class PatientViewSet(viewsets.ModelViewSet):
-    queryset = Patient.objects.all()
     serializer_class = PatientSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'user'
+
+    def get_queryset(self):
+        queryset = Patient.objects.all()
+        id_number = self.request.query_params.get('id_number')
+        if id_number:
+            queryset = queryset.filter(user__id_number=id_number)
+        return queryset

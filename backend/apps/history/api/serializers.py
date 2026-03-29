@@ -5,6 +5,8 @@ class HistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = History
         fields = [
+            'history_id',
+            'created_at',
             'doctor',
             'register',
             'reason_consultation',

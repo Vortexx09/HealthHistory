@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class History(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
     history_id = models.BigAutoField(primary_key=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     register = models.ForeignKey(Register, on_delete=models.SET_NULL, null=True)
