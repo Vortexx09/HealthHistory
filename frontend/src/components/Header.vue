@@ -76,5 +76,12 @@ import { logout } from '../services/authService'
 import { isAuthenticated, user } from '../store/auth';
 import { useRoute } from 'vue-router'
 
+const access = localStorage.getItem("access")
+const refresh = localStorage.getItem("refresh")
+
+console.log("User data:", user)
+console.log("User access token: ", access)
+console.log("User refresh token: ", refresh)
+
 const route = useRoute()
 </script>

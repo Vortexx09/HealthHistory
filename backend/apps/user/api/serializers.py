@@ -15,13 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
             "id_number",
             "id_type",
             "phone",
-            "dob",
             "user_type"
         ]
 
     def create(self, validated_data):
         password = validated_data.pop("password")
-        validated_data["username"] = validated_data["email"]
+        validated_data["username"] = validated_data["id_number"]
 
         user = User(**validated_data)
         user.set_password(password)

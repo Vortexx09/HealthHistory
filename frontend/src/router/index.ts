@@ -4,14 +4,14 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import AddPatientView from '../views/AddPatientView.vue'
-import PatientHistoryView from '../views/PatientHistoryView.vue'
+import AddHistoryView from '../views/AddHistoryView.vue'
+import ManagementView from '../views/ManagementView.vue'
 import PlaceholderView from '../views/PlaceholderView.vue'
 
-import { user } from '../store/auth'
-import { useAuth, fetchUser, logout, expiredToken, removeToken, refreshToken } from '../services/authService'
+import { useAuth, expiredToken, refreshToken } from '../services/authService'
 
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
@@ -40,9 +40,14 @@ const router = createRouter({
       component: AddPatientView,
     },
     {
-      path: '/history',
-      name: 'history',
-      component: PatientHistoryView,
+      path: '/add-history',
+      name: 'add-history',
+      component: AddHistoryView,
+    },
+    {
+      path: '/management',
+      name: 'management',
+      component: ManagementView,
     },
     {
       path: '/:pathMatch(.*)*',
@@ -55,17 +60,18 @@ const router = createRouter({
 // Router Guard
 router.beforeEach(async (to, from) => {
   const { initAuth, isAuthenticated, authInitialized } = useAuth()
-  const token = localStorage.getItem("access")
+  const access = localStorage.getItem("access")
 
-  if (expiredToken(token)){
+  const publicRoutes = ['login', 'landing', 'register']
+  if (!publicRoutes.includes(to.name as string) && expiredToken(access)) {
     await refreshToken()
   }
   
-  if (!authInitialized.value) {
+  if (!authInitialized.value)  {
     await initAuth()
   }
 
-  if (to.meta.requiresAuth && !token) {
+  if (to.meta.requiresAuth && !access) {
     return { 
       name: 'login',
     }

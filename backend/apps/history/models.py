@@ -8,9 +8,112 @@ class History(models.Model):
     history_id = models.BigAutoField(primary_key=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     register = models.ForeignKey(Register, on_delete=models.SET_NULL, null=True)
-    reason_consultation = models.TextField(null=True)
-    actual_disease = models.TextField(null=True)
-    physical_examination = models.TextField(null=True)
+
+    consultation_reason = models.TextField(null=True)
+    current_illness = models.TextField(null=True)
+
+    # System check
+    head_system = models.TextField(default="Sin alteraciones", blank=True)
+    eyes_system = models.TextField(default="Sin alteraciones", blank=True)
+    otolaryngology_system = models.TextField(default="Sin alteraciones", blank=True)
+    neck_system = models.TextField(default="Sin alteraciones", blank=True)
+    chest_system = models.TextField(default="Sin alteraciones", blank=True)
+    cardiac_system = models.TextField(default="Sin alteraciones", blank=True)
+    pulmonary_system = models.TextField(default="Sin alteraciones", blank=True)
+    digestive_system = models.TextField(default="Sin alteraciones", blank=True)
+    genitourinary_system = models.TextField(default="Sin alteraciones", blank=True)
+    central_nervous_system = models.TextField(default="Sin alteraciones", blank=True)
+    skin_system = models.TextField(default="Sin alteraciones", blank=True)
+    extremities_system = models.TextField(default="Sin alteraciones", blank=True)
+    other_system = models.TextField(default="Sin alteraciones", blank=True)
+
+    # Vital signs
+    temperature = models.FloatField(
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100)
+        ]
+    )
+    systolic_pressure = models.PositiveIntegerField(null=True, blank=True)
+    diastolic_pressure = models.PositiveIntegerField(null=True, blank=True)
+    heart_rate = models.IntegerField(null=True,
+        validators=[
+            MinValueValidator(20),
+            MaxValueValidator(220)
+        ]
+    )
+    respiratory_rate = models.IntegerField(null=True,
+        validators=[
+            MinValueValidator(12),
+            MaxValueValidator(25)
+        ]
+    )
+    weight = models.FloatField(null=True,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(200)
+        ]
+    )
+    height = models.FloatField(null=True,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(3)
+        ]
+    )
+    imc = models.FloatField(null=True,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(200)
+        ]
+    )
+    abdominal_perimeter = models.FloatField(null=True,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(200)
+        ]
+    )
+    head_perimeter = models.FloatField(null=True,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(200)
+        ]
+    )
+
+    # Physical Exam
+    consciousness_status = models.TextField(default="Sin alteraciones", blank=True)
+    respiratory_status = models.TextField(default="Sin alteraciones", blank=True)
+    hydration_status = models.TextField(default="Sin alteraciones", blank=True)
+    general_status = models.TextField(default="Sin alteraciones", blank=True)
+    physical_examination = models.TextField(default="Sin alteraciones", blank=True)
+
+    #Key Findings
+    head_findings = models.TextField(default="Sin alteraciones", blank=True)
+    eyes_findings = models.TextField(default="Sin alteraciones", blank=True)
+    otolaryngology_findings = models.TextField(default="Sin alteraciones", blank=True)
+    mouth_findings =  models.TextField(default="Sin alteraciones", blank=True)
+    neck_findings =  models.TextField(default="Sin alteraciones", blank=True)
+    chest_findings = models.TextField(default="Sin alteraciones", blank=True)
+    abdominal_findings = models.TextField(default="Sin alteraciones", blank=True)
+    genitourinary_findings = models.TextField(default="Sin alteraciones", blank=True)
+    central_nervous_findings = models.TextField(default="Sin alteraciones", blank=True)
+    skin_findings = models.TextField(default="Sin alteraciones", blank=True)
+    extremities_findings = models.TextField(default="Sin alteraciones", blank=True)
+    mental_findings = models.TextField(default="Sin alteraciones", blank=True)
+    other_findings = models.TextField(default="Sin alteraciones", blank=True)
+
+    #Analysis and conduct
+    analysis = models.TextField(default="Sin alteraciones", blank=True)
+    diagnosis = models.TextField(default="Sin alteraciones", blank=True)
+    follow_up_plan = models.TextField(blank=True)
+    clinical_orders = models.TextField(default="Sin alteraciones", blank=True)
+    family_history = models.TextField(default="Sin alteraciones", blank=True)
+    personal_history = models.TextField(default="Sin alteraciones", blank=True)
+    patient_progress = models.TextField(default="Sin alteraciones", blank=True)
+
+    #General info
+    issue_date = models.DateTimeField(auto_now=True)
+
+    """
     age = models.IntegerField(
         validators=[
             MinValueValidator(0),
@@ -76,6 +179,7 @@ class History(models.Model):
     psychiatric_conditions = models.TextField(null=True)
     genetic_diseases = models.TextField(null=True)
     vascular_diseases = models.TextField(null=True)
+    """
 
     class Meta:
         db_table = 'history'

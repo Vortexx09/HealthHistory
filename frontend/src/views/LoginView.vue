@@ -132,7 +132,6 @@ const form = ref({
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
-const role = user.value?.user_type
 
 const handleLogin = async () => {
   try {
@@ -142,18 +141,19 @@ const handleLogin = async () => {
 
     // Login and authentication
     await login(form.value.id_number, form.value.password)
+    await fetchUser()
 
     // Sucess message
     successMessage.value = 'Login successful!'
     
     // Redirect after a short delay
     setTimeout(() => {
-      if (role === 'doctor') {
+      if (user?.value?.user_type === 'doctor') {
         router.push('/dashboard')
       } else {
         router.push('/')
       }
-    }, 500)
+    }, 1000)
 
   } catch (error: any) {
     errorMessage.value = error.response?.data?.message || 'Login failed. Please try again.'

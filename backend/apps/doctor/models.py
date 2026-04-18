@@ -10,7 +10,8 @@ class Doctor(models.Model):
     specialization = models.CharField(max_length=100, null=True)
 
     class Meta:
-        db_table = 'Doctor'
+        db_table = 'doctor'
 
     def __str__(self):
         return self.doctor_id
+    

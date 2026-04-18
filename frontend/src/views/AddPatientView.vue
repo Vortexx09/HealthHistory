@@ -174,7 +174,7 @@
                   v-model="form.personal.pob"
                   type="text"
                   class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
-                  placeholder="Bogotá, Colombia"
+                  placeholder="Bogotá, Cundinamarca"
                 />
               </div>
               <div>
@@ -187,6 +187,41 @@
                   type="text"
                   class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
                   placeholder="Ingeniería"
+                />
+              </div>
+            </div>
+
+            <!-- Civil Status and Religion Row -->
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="civilStatus" class="block text-sm font-medium text-secondary-900">
+                  Estado Civil
+                </label>
+                <select
+                  id="civilStatus"
+                  v-model="form.personal.civil_status"
+                  required
+                  class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+                >
+                  <option value="">Seleccionar tipo</option>
+                  <option value="Soltero">Soltero(a)</option>
+                  <option value="Casado">Casado(a)</option>
+                  <option value="Unión Libre">Unión Libre</option>
+                  <option value="Divorciado">Divorciado(a)</option>
+                  <option value="Separado">Separado(a)</option>
+                  <option value="Viudo">Viudo(a)</option>
+                </select>
+              </div>
+              <div>
+                <label for="religion" class="block text-sm font-medium text-secondary-900">
+                  Religión
+                </label>
+                <input
+                  id="religion"
+                  v-model="form.personal.religion"
+                  type="text"
+                  class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+                  placeholder="Católico(a)"
                 />
               </div>
             </div>
@@ -314,11 +349,21 @@
           </div>
         </div>
 
+        <!-- Error Message -->
+        <div v-if="errorMessage" class="rounded-lg bg-danger-50 p-4 text-sm text-danger-600 border border-danger-200">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Success Message -->
+        <div v-if="successMessage" class="rounded-lg bg-success-50 p-4 text-sm text-success-600 border border-success-200">
+          {{ successMessage }}
+        </div>
+
         <!-- Form Actions -->
         <div class="flex gap-4 sm:justify-end">
           <button
             type="button"
-            @click="$router.back()"
+            @click="$router.push('/dashboard')"
             class="rounded-lg border border-secondary-300 px-6 py-3 text-center font-semibold text-secondary-700 transition-colors hover:bg-secondary-50"
           >
             Cancelar
@@ -338,16 +383,6 @@
             </span>
           </button>
         </div>
-
-        <!-- Error Message -->
-        <div v-if="errorMessage" class="rounded-lg bg-danger-50 p-4 text-sm text-danger-600 border border-danger-200">
-          {{ errorMessage }}
-        </div>
-
-        <!-- Success Message -->
-        <div v-if="successMessage" class="rounded-lg bg-success-50 p-4 text-sm text-success-600 border border-success-200">
-          {{ successMessage }}
-        </div>
       </form>
     </div>
   </div>
@@ -357,6 +392,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { refreshToken } from '../services/authService'
+import { user } from '../store/auth'
 
 const router = useRouter()
 
@@ -373,6 +410,8 @@ const form = ref({
     sex_code: '',
     pob: '',
     occupation: '',
+    civil_status: '',
+    religion: '',
   },
   medical: {
     disability: false,
@@ -395,14 +434,38 @@ const handleSubmit = async () => {
     errorMessage.value = ''
     successMessage.value = ''
 
-    // Example API call - replace with your actual backend endpoint
-    // const response = await axios.post('/api/patients/', {
-    //   ...form.value.personal,
-    //   ...form.value.medical,
-    // })
+    await refreshToken()
 
-    // For demo purposes, simulate a successful submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    // API call - user
+    const userResponse = await axios.post('http://127.0.0.1:8000/patients/create/', {
+      user: {
+        user_type: 3,
+        username: form.value.personal.id_number,
+        first_name: form.value.personal.first_name,
+        last_name: form.value.personal.last_name,
+        id_number: form.value.personal.id_number,
+        id_type: form.value.personal.id_type,
+        phone: form.value.personal.phone,
+        email: form.value.personal.email,
+        password: form.value.personal.id_number,
+      },
+      patient: {
+        address: form.value.personal.address,
+        sex_code: form.value.personal.sex_code,
+        dob: form.value.personal.dob,
+        pob: form.value.personal.pob,
+        occupation: form.value.personal.occupation,
+      },
+      register: {
+        disability: form.value.medical.disability,
+        diabetes: form.value.medical.diabetes,
+        cancer: form.value.medical.cancer,
+        alcohol_consumption: form.value.medical.alcohol_consumption,
+        smoker: form.value.medical.smoker,
+        drug_use: form.value.medical.drug_use,
+        occupational_risk: form.value.medical.occupational_risk,
+      }
+    })
 
     successMessage.value = '¡Paciente agregado exitosamente!'
 

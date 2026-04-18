@@ -298,7 +298,7 @@ const handleRegister = async () => {
 
     // API call
     const response = await axios.post('http://127.0.0.1:8000/users/', {
-      username: form.value.email,
+      username: form.value.idNumber,
       first_name: form.value.firstName,
       last_name: form.value.lastName,
       email: form.value.email,
@@ -313,7 +313,7 @@ const handleRegister = async () => {
     // Redirect after a short delay
     setTimeout(() => {
       router.push('/login')
-    }, 2000)
+    }, 1500)
   } catch (error: any) {
     errorMessage.value = error.response?.data?.message || 'Registration failed. Please try again.'
   } finally {

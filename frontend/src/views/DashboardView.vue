@@ -116,31 +116,9 @@
             </div>
           </router-link>
 
-          <!-- Manage Patient Feature -->
+          <!-- Add History F eature -->
           <router-link
-            to="/"
-            class="group rounded-lg bg-white p-8 shadow-sm border-2 border-secondary-200 transition-all hover:border-blue-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            <div class="flex flex-col items-center text-center">
-              <div class="flex h-16 w-16 items-center justify-center rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors">
-                <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              </div>
-              <h3 class="mt-4 text-lg font-semibold text-secondary-900">Manage Patient</h3>
-              <p class="mt-2 text-sm text-secondary-600">Update patient information and records</p>
-              <div class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 group-hover:text-blue-700">
-                Manage
-                <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </router-link>
-
-          <!-- Add History Feature -->
-          <router-link
-            to="/"
+            to="/add-history"
             class="group rounded-lg bg-white p-8 shadow-sm border-2 border-secondary-200 transition-all hover:border-accent-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-offset-2"
           >
             <div class="flex flex-col items-center text-center">
@@ -153,6 +131,28 @@
               <p class="mt-2 text-sm text-secondary-600">Record medical history and findings</p>
               <div class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-accent-600 group-hover:text-accent-700">
                 Add Record
+                <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </router-link>
+
+          <!-- Manage Patient Feature -->
+          <router-link
+            to="/management"
+            class="group rounded-lg bg-white p-8 shadow-sm border-2 border-secondary-200 transition-all hover:border-blue-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <div class="flex flex-col items-center text-center">
+              <div class="flex h-16 w-16 items-center justify-center rounded-lg bg-blue-100 group-hover:bg-blue-200 transition-colors">
+                <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </div>
+              <h3 class="mt-4 text-lg font-semibold text-secondary-900">Manage Patient</h3>
+              <p class="mt-2 text-sm text-secondary-600">Update patient information and records</p>
+              <div class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-600 group-hover:text-blue-700">
+                Manage
                 <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -238,16 +238,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { isAuthenticated, user, authInitialized }  from "../store/auth.ts"
-import axios from 'axios'
+import { user, isAuthenticated,  }  from "../store/auth.ts"
 
 // Dashboard Data
 const totalPatients = ref(48)
 const appointmentsThisMonth = ref(15)
 const urgentCases = ref(3)
 const pendingRecords = ref(7)
-
-console.log(isAuthenticated.value)
 
 const upcomingAppointments = ref([
   { id: 1, name: 'John Anderson', initials: 'JA', time: 'Today at 2:00 PM', type: 'Follow-up' },

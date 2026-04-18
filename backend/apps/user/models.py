@@ -7,7 +7,6 @@ class User(AbstractUser):
     id_number = models.CharField(max_length=20, unique=True)
     id_type = models.CharField(max_length=20)
     phone = models.CharField(max_length=20)
-    dob = models.DateField(null=True, blank=True)
     email = models.EmailField(unique=True)
 
     class Meta:

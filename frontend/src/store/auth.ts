@@ -1,7 +1,8 @@
 import { ref } from "vue"
 
-export const isAuthenticated = ref(false)
 export const user = ref<User | null>(null);
+
+export const isAuthenticated = ref(false)
 export const authInitialized = ref(false)
 
 interface User {
