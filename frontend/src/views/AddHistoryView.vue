@@ -40,16 +40,16 @@
             >
             <ul v-if="patients.length > 0" class="absolute z-10 mt-1 w-full bg-white border border-secondary-300 rounded-lg shadow-lg max-h-60 overflow-auto">
                 <li 
-                v-for="item in patients" 
-                v-bind="item.patient.patient_id"
-                v-on:mousedown="selectPatient(item)"
+                v-for="patient in patients" 
+                v-bind="patient.patient.patient_id"
+                v-on:mousedown="selectPatient(patient)"
                 class="px-4 py-2 hover:bg-primary-50 cursor-pointer border-b last:border-none"
                 >
                 <div class="font-medium text-secondary-900">
-                    {{ item.patient.user.first_name }} {{ item.patient.user.last_name }}
+                    {{ patient.patient.user.first_name }} {{ patient.patient.user.last_name }}
                 </div>
                 <div class="text-xs text-secondary-500">
-                    ID: {{ item.patient.user.id_number }} | {{ item.patient.occupation }}
+                    ID: {{ patient.patient.user.id_number }} | {{ patient.patient.occupation }}
                 </div>
                 </li>
             </ul>
@@ -877,12 +877,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { user } from '../store/auth'
 import axios from 'axios'
 
 const router = useRouter()
+const route = useRoute()
 const isLoading = ref(false)
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -948,33 +949,33 @@ const form = ref({
 })
 
 const searchPatient = async () => {
-    if (isSelecting.value || !searchQuery.value.trim()) {
-        patients.value = [];
-        return;
-    }
+  if (isSelecting.value || !searchQuery.value.trim()) {
+    patients.value = [];
+    return;
+  }
 
-    if (searchQuery.value.length > 2){
-        const response = await axios.get(`http://127.0.0.1:8000/registers/`, {
-            params: { search: searchQuery.value}
-        })
-        patients.value = response.data
-    }
-    else {
-        return;
-    }
+  if (searchQuery.value.length > 2){
+    const response = await axios.get(`http://127.0.0.1:8000/registers/`, {
+      params: { search: searchQuery.value}
+    })
+    patients.value = response.data
+  }
+  else {
+    return;
+  }
 }
 
 const selectPatient = async (item: any) => {
-    isSelecting.value = true; // Bloqueamos la búsqueda
+  isSelecting.value = true; // Bloqueamos la búsqueda
 
-    selectedPatient.value = item
-    searchQuery.value = `${item.patient.user.first_name} ${item.patient.user.last_name}`;
+  selectedPatient.value = item
+  searchQuery.value = `${item.patient.user.first_name} ${item.patient.user.last_name}`;
 
-    patients.value = []; // Limpia la lista
+  patients.value = []; // Limpia la lista
 
-    setTimeout(() => {
-        isSelecting.value = false;
-    }, 100);
+  setTimeout(() => {
+    isSelecting.value = false;
+  }, 100);
 }
 
 const handleInput = () => {
@@ -983,7 +984,7 @@ const handleInput = () => {
   // 2. Creamos un nuevo temporizador de 400ms
   debounceTimer = setTimeout(() => {
     searchPatient();
-  }, 400); // 400ms es el "punto dulce" entre rapidez y ahorro de recursos
+  }, 400);
 };
 
 const handleSubmit = async () => {
@@ -1025,6 +1026,26 @@ const closeList = () => {
     patients.value = [];
   }, 200); // Pequeño retraso para permitir que el mousedown se procese
 };
+
+onMounted(async () => {
+  if (route.query.patient_id) {
+    const responseLastHistory = await axios.get(`http://127.0.0.1:8000/histories/get_last`, {
+      params: { patient_id: route.query.patient_id}
+    });
+    form.value = responseLastHistory.data
+  }
+
+  if (route.query.user_id){
+    const response = await axios.get(`http://127.0.0.1:8000/registers/`, {
+      params: { search: route.query.user_id}
+    })
+
+    const patient = response.data[0]
+
+    searchQuery.value = `${patient.patient.user.first_name} ${patient.patient.user.last_name}`
+    selectedPatient.value = patient
+  }
+})
 
 watch(searchQuery, (newVal) => {
     if (newVal === '') {

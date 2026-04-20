@@ -15,37 +15,36 @@ class HistoryViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['register__patient__user__first_name', 'register__patient__user__last_name', 'register__patient__user__id_number']
 
+    def perform_create(self, serializer):
+        doctor = self.request.user.doctor
+        serializer.save(doctor=doctor)
 
     @action(detail=False, methods=['get'])
-    def get_latest(self, request):
-        doctor_id = request.user.id
+    def get_last(self, request):
+        doctor_id = request.user.doctor
         patient_id = request.query_params.get('patient_id')
 
-        history = History.objects.filter(
+        queryset = History.objects.select_related('register__patient').filter(
             doctor=doctor_id,
-            patient=patient_id
+            register__patient_id=patient_id
         ).order_by('-issue_date').first()
 
-        if not history:
-            return Response({"message": "Sin registros"}, status=404)
+        history = self.filter_queryset(queryset)
 
         serializer = self.get_serializer(history)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'])
     def get_all(self, request):
-        doctor_id=request.user
+        doctor = request.user.doctor
         patient_id = request.query_params.get('patient_id')
 
         queryset = History.objects.select_related('register__patient').filter(
+            doctor=doctor,
             register__patient_id=patient_id
         )
 
         histories = self.filter_queryset(queryset)
-
-        print(histories)
-        print(doctor_id)
-        print(patient_id)
 
         serializer = self.get_serializer(histories, many=True)
         return Response(serializer.data)

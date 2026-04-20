@@ -207,7 +207,13 @@
                 </div>
               </button>
               <button
-                @click="$router.push('/dashboard')"
+                @click="$router.push({
+                  path: '/add-history',
+                  query: {
+                    patient_id: selectedPatient.patient.patient_id,
+                    user_id: selectedPatient.patient.user.id_number
+                  }
+                })"
                 class="w-full rounded-lg bg-blue-50 px-4 py-3 text-left text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
               >
                 <div class="flex items-center gap-3">
@@ -218,7 +224,7 @@
                 </div>
               </button>
               <button
-                @click="$router.push('/dashboard')"
+                @click="$router.push('/add-patient')"
                 class="w-full rounded-lg bg-secondary-50 px-4 py-3 text-left text-sm font-medium text-secondary-700 transition-colors hover:bg-secondary-100"
               >
                 <div class="flex items-center gap-3">
@@ -263,16 +269,10 @@ let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 const patients = ref<any[]>([]);
 const selectedPatient = ref<any>(null);
 const histories = ref<any[]>([]);
-const selectedHistory = ref<any>(null);
 
 const isSelecting = ref(false)
 const searchQuery = ref('')
 const expandedHistoryId = ref(null)
-
-const errorMessage = ref('')
-const successMessage = ref('')
-
-console.log(histories)
 
 const searchPatient = async () => {
   if (isSelecting.value || !searchQuery.value.trim()) {
@@ -337,7 +337,6 @@ watch(searchQuery, (newVal) => {
         patients.value = [];
         selectedPatient.value = "";
         histories.value =[];
-        console.log(histories.value)
     }
 })
 </script>

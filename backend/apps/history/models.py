@@ -104,7 +104,7 @@ class History(models.Model):
     #Analysis and conduct
     analysis = models.TextField(default="Sin alteraciones", blank=True)
     diagnosis = models.TextField(default="Sin alteraciones", blank=True)
-    follow_up_plan = models.TextField(blank=True)
+    follow_up_plan = models.TextField(default="Sin seguimiento", blank=True)
     clinical_orders = models.TextField(default="Sin alteraciones", blank=True)
     family_history = models.TextField(default="Sin alteraciones", blank=True)
     personal_history = models.TextField(default="Sin alteraciones", blank=True)
