@@ -148,10 +148,10 @@
 
                     <td class="px-4 py-2 text-right">
                       <button
-                        @click="toggleHistory(history.history_id)"
+                        @click="openModal(history)"
                         class="bg-primary-600 text-white px-3 py-1 rounded"
                       >
-                        {{ expandedHistoryId === history.history_id ? 'Ocultar' : 'Ver' }}
+                        Ver
                       </button>
                     </td>
                   </tr>
@@ -254,6 +254,89 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center">
+
+    <!-- Overlay -->
+    <div 
+      class="absolute inset-0 bg-black/50"
+      @click="closeModal"
+    ></div>
+
+    <!-- Contenido -->
+    <div class="relative z-10 w-full max-w-3xl rounded-lg bg-white shadow-lg p-6">
+
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b pb-3 mb-4">
+        <h2 class="text-xl font-bold text-secondary-900">
+          Historia #{{ selectedHistory.history_id }}
+        </h2>
+        <button @click="closeModal" class="text-secondary-500 hover:text-secondary-700">
+          ✕
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="grid grid-cols-2 gap-4 text-sm max-h-[60vh] overflow-y-auto">
+
+        <div>
+          <p class="font-semibold text-secondary-700">Paciente</p>
+          <p>
+            {{ selectedPatient.patient.user.first_name }}
+            {{ selectedPatient.patient.user.last_name }}
+          </p>
+        </div>
+
+        <div>
+          <p class="font-semibold text-secondary-700">Fecha</p>
+          <p>{{ formatDate(selectedHistory.issue_date) }}</p>
+        </div>
+
+        <div class="col-span-2">
+          <p class="font-semibold text-secondary-700">Motivo de consulta</p>
+          <p>{{ selectedHistory.consultation_reason }}</p>
+        </div>
+
+        <div class="col-span-2">
+          <p class="font-semibold text-secondary-700">Diagnóstico</p>
+          <p>{{ selectedHistory.diagnosis }}</p>
+        </div>
+
+        <div>
+          <p class="font-semibold text-secondary-700">Peso</p>
+          <p>{{ selectedHistory.weight }} kg</p>
+        </div>
+
+        <div>
+          <p class="font-semibold text-secondary-700">Altura</p>
+          <p>{{ selectedHistory.height }} m</p>
+        </div>
+
+        <div>
+          <p class="font-semibold text-secondary-700">Frecuencia cardíaca</p>
+          <p>{{ selectedHistory.heart_rate }} bpm</p>
+        </div>
+
+        <div>
+          <p class="font-semibold text-secondary-700">Temperatura</p>
+          <p>{{ selectedHistory.temperature }} °C</p>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-6 text-right">
+        <button
+          @click="closeModal"
+          class="bg-secondary-200 px-4 py-2 rounded hover:bg-secondary-300"
+        >
+          Cerrar
+        </button>
+      </div>
+
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -269,6 +352,8 @@ let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 const patients = ref<any[]>([]);
 const selectedPatient = ref<any>(null);
 const histories = ref<any[]>([]);
+const selectedHistory = ref<any>(null)
+const showModal = ref(false)
 
 const isSelecting = ref(false)
 const searchQuery = ref('')
@@ -324,6 +409,16 @@ const formatDate = (date:any) => {
 const toggleHistory = (id:any) => {
   expandedHistoryId.value =
     expandedHistoryId.value === id ? null : id
+}
+
+const openModal = (history:any) => {
+  selectedHistory.value = history
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  selectedHistory.value = null
 }
 
 const closeList = () => {

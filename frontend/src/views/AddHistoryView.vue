@@ -417,7 +417,6 @@
                   type="number"
                   min="20"
                   max="220"
-                  required
                   class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
                   placeholder="75"
                 />
@@ -432,7 +431,6 @@
                   type="number"
                   min="12"
                   max="25"
-                  required
                   class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
                   placeholder="16"
                 />
@@ -504,6 +502,7 @@
                 <input
                   id="imc"
                   v-model.number="form.imc"
+                  readonly
                   type="number"
                   step="0.1"
                   min="0"
@@ -524,7 +523,6 @@
                   step="0.1"
                   min="0"
                   max="200"
-                  required
                   class="mt-2 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-secondary-900 placeholder-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
                   placeholder="85"
                 />
@@ -905,7 +903,7 @@ const form = ref({
   respiratory_rate: null,
   weight: null,
   height: null,
-  imc: null,
+  imc: 0,
   abdominal_perimeter: null,
   head_perimeter: null,
   consciousness_status: '',
@@ -1012,6 +1010,14 @@ const handleSubmit = async () => {
   }
 }
 
+const getIMC = (weight: any, height: any) => {
+  var w = parseInt(weight)
+  var h = parseInt(height)
+  var imc = w / (h * h)
+
+  return imc
+}
+
 const getSexLabel = (code: string) => {
   const labels: any = {
     M: 'Masculino',
@@ -1048,9 +1054,24 @@ onMounted(async () => {
 })
 
 watch(searchQuery, (newVal) => {
-    if (newVal === '') {
-        patients.value = [];
-        selectedPatient.value = "";
-    }
+  if (newVal === '') {
+      patients.value = [];
+      selectedPatient.value = "";
+  }
 })
+
+watch(
+  [() => form.value.weight, () => form.value.height],
+  ([weight, height]) => {
+    const w = parseFloat(weight as any)
+    const h = parseFloat(height as any)
+
+    if (!w || !h) {
+      form.value.imc = 0
+      return
+    }
+
+    form.value.imc = parseFloat((w / (h * h)).toFixed(1))
+  }
+)
 </script>
