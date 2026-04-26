@@ -257,16 +257,11 @@
 
   <!-- Modal -->
   <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center">
-
     <!-- Overlay -->
-    <div 
-      class="absolute inset-0 bg-black/50"
-      @click="closeModal"
-    ></div>
+    <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
 
     <!-- Contenido -->
-    <div class="relative z-10 w-full max-w-3xl rounded-lg bg-white shadow-lg p-6">
-
+    <div class="relative z-10 w-full max-w-4xl rounded-lg bg-white shadow-lg p-6">
       <!-- Header -->
       <div class="flex justify-between items-center border-b pb-3 mb-4">
         <h2 class="text-xl font-bold text-secondary-900">
@@ -277,52 +272,129 @@
         </button>
       </div>
 
-      <!-- Body -->
-      <div class="grid grid-cols-2 gap-4 text-sm max-h-[60vh] overflow-y-auto">
-
-        <div>
-          <p class="font-semibold text-secondary-700">Paciente</p>
-          <p>
-            {{ selectedPatient.patient.user.first_name }}
-            {{ selectedPatient.patient.user.last_name }}
-          </p>
+      <!-- Body (scroll) -->
+      <div class="max-h-[60vh] overflow-y-auto pr-2">
+        <!-- Información general -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-6">
+          <div>
+            <p class="font-semibold text-secondary-700">Doctor</p>
+            <p>{{ selectedHistory.doctor?.user?.first_name }} {{ selectedHistory.doctor?.user?.last_name || 'No asignado' }}</p>
+          </div>
+          <div>
+            <p class="font-semibold text-secondary-700">Registro (Register)</p>
+            <p>{{ selectedHistory.register?.register_id || 'No asignado' }}</p>
+          </div>
+          <div>
+            <p class="font-semibold text-secondary-700">Fecha de emisión</p>
+            <p>{{ formatDate(selectedHistory.issue_date) }}</p>
+          </div>
+          <div>
+            <p class="font-semibold text-secondary-700">Paciente</p>
+            <p>{{ selectedPatient?.patient?.user?.first_name }} {{ selectedPatient?.patient?.user?.last_name }}</p>
+          </div>
         </div>
 
-        <div>
-          <p class="font-semibold text-secondary-700">Fecha</p>
-          <p>{{ formatDate(selectedHistory.issue_date) }}</p>
+        <!-- Motivo y enfermedad actual -->
+        <div class="grid grid-cols-1 gap-4 text-sm mb-6 border-t pt-4">
+          <div>
+            <p class="font-semibold text-secondary-700">Motivo de consulta</p>
+            <p>{{ selectedHistory.consultation_reason || '—' }}</p>
+          </div>
+          <div>
+            <p class="font-semibold text-secondary-700">Enfermedad actual</p>
+            <p>{{ selectedHistory.current_illness || '—' }}</p>
+          </div>
         </div>
 
-        <div class="col-span-2">
-          <p class="font-semibold text-secondary-700">Motivo de consulta</p>
-          <p>{{ selectedHistory.consultation_reason }}</p>
+        <!-- Signos vitales -->
+        <div class="mb-6 border-t pt-4">
+          <h3 class="text-md font-bold text-secondary-800 mb-2">Signos vitales</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div><span class="font-semibold">Temperatura:</span> {{ selectedHistory.temperature }} °C</div>
+            <div><span class="font-semibold">Presión sistólica:</span> {{ selectedHistory.systolic_pressure || '—' }} mmHg</div>
+            <div><span class="font-semibold">Presión diastólica:</span> {{ selectedHistory.diastolic_pressure || '—' }} mmHg</div>
+            <div><span class="font-semibold">Frecuencia cardíaca:</span> {{ selectedHistory.heart_rate }} bpm</div>
+            <div><span class="font-semibold">Frecuencia respiratoria:</span> {{ selectedHistory.respiratory_rate || '—' }} rpm</div>
+            <div><span class="font-semibold">Peso:</span> {{ selectedHistory.weight }} kg</div>
+            <div><span class="font-semibold">Altura:</span> {{ selectedHistory.height }} m</div>
+            <div><span class="font-semibold">IMC:</span> {{ selectedHistory.imc || '—' }}</div>
+            <div><span class="font-semibold">Perímetro abdominal:</span> {{ selectedHistory.abdominal_perimeter || '—' }} cm</div>
+            <div><span class="font-semibold">Perímetro cefálico:</span> {{ selectedHistory.head_perimeter || '—' }} cm</div>
+          </div>
         </div>
 
-        <div class="col-span-2">
-          <p class="font-semibold text-secondary-700">Diagnóstico</p>
-          <p>{{ selectedHistory.diagnosis }}</p>
+        <!-- Revisión por sistemas (System check) -->
+        <div class="mb-6 border-t pt-4">
+          <h3 class="text-md font-bold text-secondary-800 mb-2">Revisión por sistemas</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div><span class="font-semibold">Cabeza:</span> {{ selectedHistory.head_system }}</div>
+            <div><span class="font-semibold">Ojos:</span> {{ selectedHistory.eyes_system }}</div>
+            <div><span class="font-semibold">Otorrinolaringología:</span> {{ selectedHistory.otolaryngology_system }}</div>
+            <div><span class="font-semibold">Cuello:</span> {{ selectedHistory.neck_system }}</div>
+            <div><span class="font-semibold">Tórax:</span> {{ selectedHistory.chest_system }}</div>
+            <div><span class="font-semibold">Cardiovascular:</span> {{ selectedHistory.cardiac_system }}</div>
+            <div><span class="font-semibold">Pulmonar:</span> {{ selectedHistory.pulmonary_system }}</div>
+            <div><span class="font-semibold">Digestivo:</span> {{ selectedHistory.digestive_system }}</div>
+            <div><span class="font-semibold">Genitourinario:</span> {{ selectedHistory.genitourinary_system }}</div>
+            <div><span class="font-semibold">Sistema nervioso central:</span> {{ selectedHistory.central_nervous_system }}</div>
+            <div><span class="font-semibold">Piel:</span> {{ selectedHistory.skin_system }}</div>
+            <div><span class="font-semibold">Extremidades:</span> {{ selectedHistory.extremities_system }}</div>
+            <div><span class="font-semibold">Otros:</span> {{ selectedHistory.other_system }}</div>
+          </div>
         </div>
 
-        <div>
-          <p class="font-semibold text-secondary-700">Peso</p>
-          <p>{{ selectedHistory.weight }} kg</p>
+        <!-- Examen físico -->
+        <div class="mb-6 border-t pt-4">
+          <h3 class="text-md font-bold text-secondary-800 mb-2">Examen físico</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div><span class="font-semibold">Estado de conciencia:</span> {{ selectedHistory.consciousness_status }}</div>
+            <div><span class="font-semibold">Estado respiratorio:</span> {{ selectedHistory.respiratory_status }}</div>
+            <div><span class="font-semibold">Hidratación:</span> {{ selectedHistory.hydration_status }}</div>
+            <div><span class="font-semibold">Estado general:</span> {{ selectedHistory.general_status }}</div>
+            <div class="col-span-2"><span class="font-semibold">Examen físico detallado:</span> {{ selectedHistory.physical_examination }}</div>
+          </div>
         </div>
 
-        <div>
-          <p class="font-semibold text-secondary-700">Altura</p>
-          <p>{{ selectedHistory.height }} m</p>
+        <!-- Hallazgos clave (Key findings) -->
+        <div class="mb-6 border-t pt-4">
+          <h3 class="text-md font-bold text-secondary-800 mb-2">Hallazgos clave</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div><span class="font-semibold">Cabeza:</span> {{ selectedHistory.head_findings }}</div>
+            <div><span class="font-semibold">Ojos:</span> {{ selectedHistory.eyes_findings }}</div>
+            <div><span class="font-semibold">Otorrinolaringología:</span> {{ selectedHistory.otolaryngology_findings }}</div>
+            <div><span class="font-semibold">Boca:</span> {{ selectedHistory.mouth_findings }}</div>
+            <div><span class="font-semibold">Cuello:</span> {{ selectedHistory.neck_findings }}</div>
+            <div><span class="font-semibold">Tórax:</span> {{ selectedHistory.chest_findings }}</div>
+            <div><span class="font-semibold">Abdomen:</span> {{ selectedHistory.abdominal_findings }}</div>
+            <div><span class="font-semibold">Genitourinario:</span> {{ selectedHistory.genitourinary_findings }}</div>
+            <div><span class="font-semibold">Sistema nervioso central:</span> {{ selectedHistory.central_nervous_findings }}</div>
+            <div><span class="font-semibold">Piel:</span> {{ selectedHistory.skin_findings }}</div>
+            <div><span class="font-semibold">Extremidades:</span> {{ selectedHistory.extremities_findings }}</div>
+            <div><span class="font-semibold">Estado mental:</span> {{ selectedHistory.mental_findings }}</div>
+            <div><span class="font-semibold">Otros:</span> {{ selectedHistory.other_findings }}</div>
+          </div>
         </div>
 
-        <div>
-          <p class="font-semibold text-secondary-700">Frecuencia cardíaca</p>
-          <p>{{ selectedHistory.heart_rate }} bpm</p>
+        <!-- Análisis y conducta -->
+        <div class="mb-6 border-t pt-4">
+          <h3 class="text-md font-bold text-secondary-800 mb-2">Análisis y conducta</h3>
+          <div class="grid grid-cols-1 gap-3 text-sm">
+            <div><span class="font-semibold">Análisis:</span> {{ selectedHistory.analysis }}</div>
+            <div><span class="font-semibold">Diagnóstico:</span> {{ selectedHistory.diagnosis }}</div>
+            <div><span class="font-semibold">Plan de seguimiento:</span> {{ selectedHistory.follow_up_plan }}</div>
+            <div><span class="font-semibold">Órdenes clínicas:</span> {{ selectedHistory.clinical_orders }}</div>
+          </div>
         </div>
 
-        <div>
-          <p class="font-semibold text-secondary-700">Temperatura</p>
-          <p>{{ selectedHistory.temperature }} °C</p>
+        <!-- Antecedentes y progreso -->
+        <div class="mb-6 border-t pt-4">
+          <h3 class="text-md font-bold text-secondary-800 mb-2">Antecedentes y evolución</h3>
+          <div class="grid grid-cols-1 gap-3 text-sm">
+            <div><span class="font-semibold">Antecedentes familiares:</span> {{ selectedHistory.family_history }}</div>
+            <div><span class="font-semibold">Antecedentes personales:</span> {{ selectedHistory.personal_history }}</div>
+            <div><span class="font-semibold">Evolución del paciente:</span> {{ selectedHistory.patient_progress }}</div>
+          </div>
         </div>
-
       </div>
 
       <!-- Footer -->
@@ -334,7 +406,6 @@
           Cerrar
         </button>
       </div>
-
     </div>
   </div>
 </template>

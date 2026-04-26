@@ -439,7 +439,7 @@ const handleSubmit = async () => {
     // API call - user
     const userResponse = await axios.post('http://127.0.0.1:8000/patients/create/', {
       user: {
-        user_type: 3,
+        user_type: 2,
         username: form.value.personal.id_number,
         first_name: form.value.personal.first_name,
         last_name: form.value.personal.last_name,
@@ -471,7 +471,7 @@ const handleSubmit = async () => {
 
     // Redirect to history after a short delay
     setTimeout(() => {
-      router.push('/history')
+      router.push('/add-history')
     }, 1500)
   } catch (error: any) {
     errorMessage.value = error.response?.data?.message || 'Error al guardar el paciente. Por favor intenta de nuevo.'

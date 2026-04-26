@@ -423,7 +423,7 @@
               </div>
               <div>
                 <label for="respiratoryRate" class="block text-sm font-medium text-secondary-900">
-                  Frecuencia Respiratoria <span class="text-danger-600">*</span>
+                  Frecuencia Respiratoria
                 </label>
                 <input
                   id="respiratoryRate"
@@ -1008,14 +1008,6 @@ const handleSubmit = async () => {
   } finally {
     isLoading.value = false
   }
-}
-
-const getIMC = (weight: any, height: any) => {
-  var w = parseInt(weight)
-  var h = parseInt(height)
-  var imc = w / (h * h)
-
-  return imc
 }
 
 const getSexLabel = (code: string) => {
