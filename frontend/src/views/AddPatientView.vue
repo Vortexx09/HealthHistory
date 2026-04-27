@@ -455,6 +455,8 @@ const handleSubmit = async () => {
         dob: form.value.personal.dob,
         pob: form.value.personal.pob,
         occupation: form.value.personal.occupation,
+        civil_status: form.value.personal.civil_status,
+        religion: form.value.personal.religion,
       },
       register: {
         disability: form.value.medical.disability,
